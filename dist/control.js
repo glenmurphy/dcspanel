@@ -14,10 +14,11 @@ function getControlConfig(control_id) {
 function byteToChar(b) {
   switch (b) {
     case 0:  return " ";
-    case 161: return "[]";//"⌷";  // CDU input thingy - need to find a single char for this
-    case 169: return ".";//"•";   // a dot •
-    case 174: return "^";//"↕";   // updown arrow
-    case 182: return "_";//"▊";  // blinking cursor
+
+    case 161: return "\u{2337}";   //⌷ : CDU input [] - need to find a better char for this
+    case 169: return "\u{2022}";   //• : a dot •
+    case 174: return "\u{2195}";   //↕ : updown arrow
+    case 182: return "\u{2588}";   //▊: blinking cursor
     default: return String.fromCharCode(b);
   }
 }
@@ -112,7 +113,7 @@ export default class Control {
   render(ctx) {
     if (this.control_data.control_type == 'display') {
       ctx.fillStyle = '#00ff00';
-      ctx.font = `${this.h}px Menlo, Consolas, Monaco`;
+      ctx.font = `${this.h}px Menlo, Consolas`;
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
 
@@ -131,7 +132,7 @@ export default class Control {
       if (this.label) {
         ctx.fillStyle = '#eeeeee';
         let scale = 0.45;
-        ctx.font = `${this.h * scale}px Menlo, Consolas, Monaco`;
+        ctx.font = `${this.h * scale}px Menlo, Consolas`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(this.label, this.x + this.w / 2, this.y + this.h / 2 + 2);
