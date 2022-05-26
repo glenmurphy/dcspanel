@@ -1,0 +1,16 @@
+[package]
+name = "panel"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.18.1", features = ["rt-multi-thread", "macros", "sync"] }
+axum = { version = "0.5.6", features = ["ws", "headers"] }
+axum-extra = { version = "0.3.3", features = ["spa"] }
+headers = "0.3"
+webbrowser = "0.7.1"
+tray-item = "0.7.0"
+
+# For tray-item to build the rc
+[target.'cfg(windows)'.build-dependencies]
+windres = "*"

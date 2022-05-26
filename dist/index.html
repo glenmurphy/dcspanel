@@ -1,0 +1,104 @@
+<html>
+<head>
+  <title>Panel</title>
+  <link rel="manifest" href="/assets/manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type=""text/css">
+  body { margin : 0px; padding: 0px; }
+  </style>
+</head>
+<script type="module">
+  let config = {
+    background : 'black',
+    w : 480,
+    h : 640,
+    controls : [
+      /*
+      { id : 'AHCP_GUNPAC',   x : 10, y : 10, w : 70, h : 70, },
+      { id : 'LMFD_01',       x : 390, y : 550, w : 80, h : 80, },
+      { id : 'AHCP_TGP',      x : 10, y : 550, w : 80, h : 80, },
+      */
+
+      { id : 'CDU_LINE0',     x : 105, y : 25, w : 270, h : 18 },
+      { id : 'CDU_LINE1',     x : 105, y : 44, w : 270, h : 18 },
+      { id : 'CDU_LINE2',     x : 105, y : 63, w : 270, h : 18 },
+      { id : 'CDU_LINE3',     x : 105, y : 82, w : 270, h : 18 },
+      { id : 'CDU_LINE4',     x : 105, y : 101, w : 270, h : 18 },
+      { id : 'CDU_LINE5',     x : 105, y : 120, w : 270, h : 18 },
+      { id : 'CDU_LINE6',     x : 105, y : 139, w : 270, h : 18 },
+      { id : 'CDU_LINE7',     x : 105, y : 158, w : 270, h : 18 },
+      { id : 'CDU_LINE8',     x : 105, y : 177, w : 270, h : 18 },
+      { id : 'CDU_LINE9',     x : 105, y : 196, w : 270, h : 18 },
+
+      { id : 'CDU_LSK_3L',    x : 39, y : 61, w : 35, h : 24, label : '>'},
+      { id : 'CDU_LSK_5L',    x : 39, y : 98, w : 35, h : 24, label : '>' },
+      { id : 'CDU_LSK_7L',    x : 39, y : 136, w : 35, h : 24, label : '>' },
+      { id : 'CDU_LSK_9L',    x : 39, y : 174, w : 35, h : 24, label : '>' },
+      
+      { id : 'CDU_LSK_3R',    x : 402, y : 61, w : 35, h : 24, label : '<' },
+      { id : 'CDU_LSK_5R',    x : 402, y : 98, w : 35, h : 24, label : '<' },
+      { id : 'CDU_LSK_7R',    x : 402, y : 136, w : 35, h : 24, label : '<' },
+      { id : 'CDU_LSK_9R',    x : 402, y : 174, w : 35, h : 24, label : '<' },
+
+      { id : 'CDU_SYS',       x : 38, y : 244, w : 36, h : 36, label : 'SYS' },
+      { id : 'CDU_NAV',       x : 91, y : 244, w : 36, h : 36, label : 'NAV' },
+      { id : 'CDU_WP',        x : 144, y : 244, w : 36, h : 36, label : 'WP' },
+      { id : 'CDU_OSET',      x : 197, y : 244, w : 36, h : 36, label : 'OST' },
+      { id : 'CDU_FPM',       x : 250, y : 244, w : 36, h : 36, label : 'FPM' },
+      { id : 'CDU_PREV',      x : 303, y : 244, w : 36, h : 36, label : 'PRV' },
+
+      { id : 'CDU_1',         x : 11, y : 295, w : 38, h : 38 },
+      { id : 'CDU_2',         x : 62, y : 295, w : 38, h : 38 },
+      { id : 'CDU_3',         x : 112, y : 295, w : 38, h : 38 },
+      { id : 'CDU_4',         x : 11, y : 347, w : 38, h : 38 },
+      { id : 'CDU_5',         x : 62, y : 347, w : 38, h : 38 },
+      { id : 'CDU_6',         x : 112, y : 347, w : 38, h : 38 },
+      { id : 'CDU_7',         x : 11, y : 399, w : 38, h : 38 },
+      { id : 'CDU_8',         x : 62, y : 399, w : 38, h : 38 },
+      { id : 'CDU_9',         x : 112, y : 399, w : 38, h : 38 },
+      { id : 'CDU_0',         x : 62, y : 451, w : 38, h : 38 },
+      { id : 'CDU_POINT',     x : 11, y : 451, w : 38, h : 38, label : '.' },
+      { id : 'CDU_SLASH',     x : 112, y : 451, w : 38, h : 38, label : '/' },
+
+      { id : 'CDU_A',         x : 179, y : 295, w : 38, h : 38 },
+      { id : 'CDU_B',         x : 230, y : 295, w : 38, h : 38 },
+      { id : 'CDU_C',         x : 280, y : 295, w : 38, h : 38 },
+      { id : 'CDU_D',         x : 332, y : 295, w : 38, h : 38 },
+      { id : 'CDU_E',         x : 383, y : 295, w : 38, h : 38 },
+      { id : 'CDU_F',         x : 433, y : 295, w : 38, h : 38 },
+      { id : 'CDU_G',         x : 179, y : 347, w : 38, h : 38 },
+      { id : 'CDU_H',         x : 230, y : 347, w : 38, h : 38 },
+      { id : 'CDU_I',         x : 280, y : 347, w : 38, h : 38 },
+      { id : 'CDU_J',         x : 332, y : 347, w : 38, h : 38 },
+      { id : 'CDU_K',         x : 383, y : 347, w : 38, h : 38 },
+      { id : 'CDU_L',         x : 433, y : 347, w : 38, h : 38 },
+      { id : 'CDU_M',         x : 179, y : 399, w : 38, h : 38 },
+      { id : 'CDU_N',         x : 230, y : 399, w : 38, h : 38 },
+      { id : 'CDU_O',         x : 280, y : 399, w : 38, h : 38 },
+      { id : 'CDU_P',         x : 332, y : 399, w : 38, h : 38 },
+      { id : 'CDU_Q',         x : 383, y : 399, w : 38, h : 38 },
+      { id : 'CDU_R',         x : 433, y : 399, w : 38, h : 38 },
+      { id : 'CDU_S',         x : 179, y : 451, w : 38, h : 38 },
+      { id : 'CDU_T',         x : 230, y : 451, w : 38, h : 38 },
+      { id : 'CDU_U',         x : 280, y : 451, w : 38, h : 38 },
+      { id : 'CDU_V',         x : 332, y : 451, w : 38, h : 38 },
+      { id : 'CDU_W',         x : 383, y : 451, w : 38, h : 38 },
+      { id : 'CDU_X',         x : 433, y : 451, w : 38, h : 38 },
+
+      { id : 'CDU_BCK',       x : 230, y : 508, w : 38, h : 38, label : 'BCK' },
+      { id : 'CDU_SPC',       x : 280, y : 508, w : 38, h : 38, label : 'SPC' },
+      { id : 'CDU_Y',         x : 332, y : 508, w : 38, h : 38 },
+      { id : 'CDU_Z',         x : 383, y : 508, w : 38, h : 38 },
+
+      { id : 'CDU_MK',        x : 62, y : 508, w : 38, h : 38, label : 'MK' },
+      { id : 'CDU_CLR',       x : 112, y : 508, w : 38, h : 38, label : 'CLR' },
+      { id : 'CDU_FA',        x : 163, y : 508, w : 38, h : 38, label : 'FA'  },
+
+    ]
+  }
+  import Panel from './assets/panel.js';
+  let p = new Panel();
+  p.loadConfig(config);
+</script>
+<body></body>
+</html>

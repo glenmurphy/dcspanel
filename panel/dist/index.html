@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>Panel</title>
+  <link rel="manifest" href="/assets/manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type=""text/css">
+  body { margin : 0px; padding: 0px; }
+  </style>
+</head>
+<script type="module">
+  let config = {
+    background : 'black',
+    w : 480,
+    h : 640,
+    widgets : [
+      {
+        id : 'w1',
+        name : 'b1',
+        x : 10,
+        y : 10,
+        w : 70,
+        h : 70,
+        keys : []
+      },
+      {
+        id : 'w2',
+        name : 'b2',
+        x : 390,
+        y : 550,
+        w : 80,
+        h : 80,
+        keys : []
+      },
+    ]
+  }
+  import Panel from './assets/panel.js';
+  let p = new Panel();
+  p.loadConfig(config);
+</script>
+<body></body>
+</html>

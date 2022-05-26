@@ -1,0 +1,3 @@
+id         ICON "./rc/panel.ico"
+tray-off   ICON "./rc/tray-off.ico"
+tray-on    ICON "./rc/tray-on.ico"
