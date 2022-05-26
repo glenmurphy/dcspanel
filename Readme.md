@@ -18,6 +18,11 @@ Operate DCS from your a web browser, which lets you do things like have CDUs on 
 
 ### Architecture
 
-- rsbios is the module that handles the DCS-BIOS communication.
-- panel is the module that handles the web server and the systray.
+- `rsbios` is the module that handles the DCS-BIOS communication.
+- `panel` is the module that handles the web server and the systray.
 - the 'dist' folder contains all the HTML+JS that handles the frontend.
+
+### Work needed
+
+- Design
+- Support more control types (e.g. the CDU is currently missing the rocker switches)
