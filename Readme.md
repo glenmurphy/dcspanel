@@ -15,6 +15,8 @@ Operate DCS from your a web browser, which lets you do things like have CDUs on 
 - Right-click on the new icon in your tray and select 'Show'
 - Access the webserver on port 8217 (e.g. http://localhost:8217/)
 - You should see the CDU fill out
+- If you want to add your own controls, edit `index.html`
+- If you want to add controls from other aircraft, you'll also need to import the appropriate JSON from the DCS BIOS Ctrl-REF
 
 ### Architecture
 

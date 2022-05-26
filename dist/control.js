@@ -15,10 +15,10 @@ function byteToChar(b) {
   switch (b) {
     case 0:  return " ";
 
-    case 161: return "\u{2337}";   //⌷ : CDU input [] - need to find a better char for this
-    case 169: return "\u{2022}";   //• : a dot •
-    case 174: return "\u{2195}";   //↕ : updown arrow
-    case 182: return "\u{2588}";   //▊: blinking cursor
+    case 161: return "\u{2337}"; //⌷ : CDU input [] - need to find a better char for this
+    case 169: return "\u{2022}"; //• : a dot •
+    case 174: return "\u{2195}"; //↕ : updown arrow
+    case 182: return "\u{2588}"; //▊: blinking cursor
     default: return String.fromCharCode(b);
   }
 }
