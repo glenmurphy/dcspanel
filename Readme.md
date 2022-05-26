@@ -1,5 +1,7 @@
 # DCSPanel
 
+https://user-images.githubusercontent.com/163439/170457874-8832e124-75db-4140-a6d2-679a39b3bfaf.mp4
+
 Operate DCS from your a web browser, which lets you do things like have CDUs on a tablet. This the very basics, and does not yet include all the controls or imagery.
 
 ### Installation and Usage
