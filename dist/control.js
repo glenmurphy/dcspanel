@@ -30,9 +30,60 @@ function getInteger(b) {
   var sign = byteA & (1 << 7);
   var result = (((byteA & 0xFF) << 8) | (byteB & 0xFF));
   if (sign) {
-     result = 0xFFFF0000 | x;  // fill in most significant bits with 1's
+     result = 0xFFFF0000 | result;  // fill in most significant bits with 1's
   }
   return result;
+}
+
+function render_rocker(control, ctx) {
+  let a, b;
+  if (control.w > control.h) {
+    a = {x: control.x, y: control.y, w: control.w / 2, h: control.h};                 // left
+    b = {x: control.x + control.w / 2, y: control.y, w: control.w / 2, h: control.h}; // right     
+  } else {
+    a = {x: control.x, y: control.y + control.h / 2, w: control.w, h: control.h / 2}; // down
+    b = {x: control.x, y: control.y, w: control.w, h: control.h / 2};                 // up
+  }
+
+  ctx.fillStyle = '#aaaaaa';
+  if (control.pressed) {
+    if (control.outputs[0].getData() == 0) {
+      ctx.fillRect(a.x, a.y, a.w, a.h);
+    }
+    if (control.outputs[0].getData() == 2) {
+      ctx.fillRect(b.x, b.y, b.w, b.h);
+    }
+  }
+
+  if (control.label.length == 2) {
+    ctx.fillStyle = '#eeeeee';
+    let scale = 0.45;
+    ctx.font = `${Math.min(control.w, control.h) * scale}px Menlo, Consolas`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(control.label[0], a.x + a.w / 2, a.y + a.h / 2 + 2);
+    ctx.fillText(control.label[1], b.x + b.w / 2, b.y + b.h / 2 + 2);
+  }
+
+  ctx.strokeRect(control.x, control.y, control.w, control.h);
+}
+
+function render_button(control, ctx) {
+  if (control.pressed || control.outputs[0].getData() == 1) {
+    ctx.fillStyle = '#aaaaaa';
+    ctx.fillRect(control.x, control.y, control.w, control.h);
+  }
+
+  if (control.label) {
+    ctx.fillStyle = '#eeeeee';
+    let scale = 0.45;
+    ctx.font = `${control.h * scale}px Menlo, Consolas`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(control.label, control.x + control.w / 2, control.y + control.h / 2 + 2);
+  }
+
+  ctx.strokeRect(control.x, control.y, control.w, control.h);
 }
 
 class Output {
@@ -66,6 +117,10 @@ class Output {
   getData() {
     return this.data;
   }
+  
+  setData(d) {
+    this.data = d;
+  }
 }
 
 export default class Control {
@@ -90,24 +145,54 @@ export default class Control {
     for (let i = 0; i < this.control_data.outputs.length; i++) {
       this.outputs.push(new Output(i, bios, this.control_data.outputs[i], this.handleOutput.bind(this)));
     }
+
+    if (this.control_data.physical_variant == 'rocker_switch') {
+      this.outputs[0].setData(1);
+    } else {
+      this.outputs[0].setData(0);
+    }
   }
 
   handleOutput(id, data) {
-    log(`${this.id}: ${id}, ${data}`);
+    //log(`${this.id}: ${id}, ${data}`);
     if (this.updateHandler)
       this.updateHandler();
   }
 
-  press() {
+  press(x, y) {
     this.pressed = true;
 
-    this.bios.send(`${this.id} 1\n`);
+    if (this.control_data.physical_variant == 'rocker_switch') {
+      if (this.w > this.h) {
+        if (x < this.w / 2) {
+          this.bios.send(`${this.id} 0\n`); // left
+        } else {
+          this.bios.send(`${this.id} 2\n`); // right
+        }
+      } else {
+        if (y < this.h / 2) {
+          console.log('up');
+          this.bios.send(`${this.id} 2\n`); // up
+        } else {
+          console.log('down');
+          this.bios.send(`${this.id} 0\n`); // down
+        }
+      }
+    } else {
+      // Assume button
+      this.bios.send(`${this.id} 1\n`);
+    }
   }
 
   release() {
     this.pressed = false;
 
-    this.bios.send(`${this.id} 0\n`);
+    if (this.control_data.physical_variant == 'rocker_switch') {
+      this.bios.send(`${this.id} 1\n`);
+    } else {
+      // Assume button
+      this.bios.send(`${this.id} 0\n`);
+    }
   }
 
   render(ctx) {
@@ -124,21 +209,15 @@ export default class Control {
       }
     } else {
       // Assume 'selector'
-      if (this.pressed || this.outputs[0].getData() == 1) {
-        ctx.fillStyle = '#aaaaaa';
-        ctx.fillRect(this.x, this.y, this.w, this.h);
+      switch (this.control_data.physical_variant) {
+        case 'rocker_switch':
+          render_rocker(this, ctx);
+          break;
+        case 'push_button':
+        default:
+          render_button(this, ctx);
+          break;
       }
-
-      if (this.label) {
-        ctx.fillStyle = '#eeeeee';
-        let scale = 0.45;
-        ctx.font = `${this.h * scale}px Menlo, Consolas`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(this.label, this.x + this.w / 2, this.y + this.h / 2 + 2);
-      }
-
-      ctx.strokeRect(this.x, this.y, this.w, this.h);
     }
   }
 }
