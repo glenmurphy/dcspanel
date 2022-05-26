@@ -1,0 +1,10 @@
+export default {
+  background : 'black',
+  w : 640,
+  h : 480,
+  controls : [
+    { id : 'CDU_LINE0',     x : 95, y : 25, w : 300, h : 18 },
+
+    { id : 'CDU_LSK_3L',    x : 39, y : 61, w : 35, h : 24, label : '>'},
+  ]
+}

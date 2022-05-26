@@ -348,6 +348,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "dcs_panel"
+version = "0.1.0"
+dependencies = [
+ "panel",
+ "rsbios",
+ "tokio",
+]
+
+[[package]]
 name = "digest"
 version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1090,15 +1099,6 @@ dependencies = [
  "tray-item",
  "webbrowser",
  "windres",
-]
-
-[[package]]
-name = "panel_test"
-version = "0.1.0"
-dependencies = [
- "panel",
- "rsbios",
- "tokio",
 ]
 
 [[package]]

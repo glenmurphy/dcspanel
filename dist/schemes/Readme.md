@@ -1,0 +1,1 @@
+These are DCS BIOS configurations, and you should not edit them

@@ -3,7 +3,7 @@ import log from './log.js';
 
 export default class DcsBios {
   constructor() {
-    this.data = new Array(0xFFFF);
+    this.memory = new Array(0xFFFF);
     this.listeners = [];
     this.socket = new Socket(this.handleMessage.bind(this));
   }
@@ -22,12 +22,12 @@ export default class DcsBios {
 
   async handleData(addr, data) {
     for (let i = 0; i < data.length; i++) {
-      this.data[addr + i] = data[i];
+      this.memory[addr + i] = data[i];
     }
 
     for (const listener of this.listeners) {
       if (addr >= listener.start && addr < listener.end) {
-        listener.handler(listener.start, this.data.slice(listener.start, listener.end));
+        listener.handler(this.memory.slice(listener.start, listener.end));
       }
     }
   }

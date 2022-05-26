@@ -1,16 +1,20 @@
 import Socket from './socket.js';
 import log from './log.js';
 import DcsBios from './dcsbios.js';
-import Control from './control.js';
+import createControl from './controls/create.js';
 
-/*
-let config = {
-  name : '',
-  background : '',
-  size : { w : 0, h : 0 },
-  widgets : []
-}
-*/
+var loadJSON = (await (async function (url, flush) {
+  var cache = {};
+
+  return async function(url, flush) {
+    if (flush != true && url in cache) return cache[url]; 
+
+    const res = await fetch(url);
+    const json = await res.json();
+    cache[url] = json;
+    return json;
+  };
+})());
 
 export default class Panel {
   constructor() {
@@ -22,23 +26,41 @@ export default class Panel {
     this.ctx = this.canvas.getContext('2d');
     document.body.appendChild(this.canvas);
 
-    this.pressed = null; // widget being engaged with
+    this.engaged = null; // widget being engaged with
     this.controls = [];
     
     window.addEventListener('mousedown', this.handleMouseDown.bind(this));
+    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
     window.addEventListener('mouseup', this.handleUp.bind(this));
+
     this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), true);
+    this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), true);
     this.canvas.addEventListener('touchend', this.handleUp.bind(this), true);
+
     window.addEventListener('resize', this.handleResize.bind(this));
   }
 
-  loadConfig(config) {
+  async setConfig(config_url) {
     this.controls = [];
-    this.config = config;
 
+    const config = await loadJSON(config_url);
+    const scheme = await loadJSON(config.scheme);
+
+    function getControlScheme(control_id) {
+      for (var key in scheme) {
+        for (var id in scheme[key]) {
+          if (control_id == id) {
+            return scheme[key][id];
+          }
+        }
+      }
+      
+      throw new Error(`Could not find control scheme for: ${control_id} in ${config.scheme}`);
+    }
+
+    this.config = config;
     for (let control_config of this.config.controls) {
-      let control = new Control(this.bios, control_config, this.render.bind(this));
-      this.controls.push(control);
+      this.controls.push(createControl(this.bios, control_config, getControlScheme(control_config.id), this.render.bind(this)));
     }
 
     this.render();
@@ -65,31 +87,23 @@ export default class Panel {
   }
 
   engageControl(control, x, y) {
-    if (this.pressed) {
+    if (this.engaged) {
       this.disengageControl();
     }
 
-    this.pressed = control;
-
-    // Do control action
-    control.press(x, y);
-    // this.socket.send(`+${this.pressed.id}`);
-
+    this.engaged = control;
+    this.engaged.press(x, y);
     this.render(); // we should queue renders
   }
 
   disengageControl() {
-    if (!this.pressed) return;
+    if (!this.engaged) return;
 
     // Do control action
-    // this.socket.send(`-${this.pressed.id}`);
-    this.pressed.release();
-
-    this.pressed = null;
-
+    this.engaged.release();
+    this.engaged = null;
     this.render(); // we should queue renders
   }
-
 
   render() {
     this.ctx.strokeStyle = '#fff';
@@ -128,6 +142,26 @@ export default class Panel {
     this.render();
   }
 
+
+  handlePress(pos) {
+    let control = this.getControl(pos);
+    if (control)
+      this.engageControl(control, pos.x - control.x, pos.y - control.y);
+  }
+
+  handleMove(pos) {
+    if (this.engaged) {
+      this.engaged.move(pos.x - this.engaged.x, pos.y - this.engaged.y);
+      this.render();
+    }
+  }
+
+  handleUp(e) {
+    e.preventDefault();
+    this.disengageControl();
+  }
+
+  // hardware-specific handlers 
   handleMouseDown(e) {
     e.preventDefault();
     let pos = this.getPanelPos(e.clientX, e.clientY);
@@ -143,15 +177,19 @@ export default class Panel {
     this.handlePress(pos);
   }
 
-  handlePress(pos) {
-    let control = this.getControl(pos);
-    if (control)
-      this.engageControl(control, pos.x - control.x, pos.y - control.y);
+  handleTouchMove(e) {
+    e.preventDefault();
+    let touch = e.touches[0];
+    let pos = this.getPanelPos(touch.clientX, touch.clientY);
+
+    this.handleMove(pos.x, pos.y);
   }
 
-  handleUp(e) {
+  handleMouseMove(e) {
     e.preventDefault();
-    this.disengageControl();
+    let pos = this.getPanelPos(e.clientX, e.clientY);
+
+    this.handleMove(pos);
   }
 }
 
