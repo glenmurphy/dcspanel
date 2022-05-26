@@ -171,10 +171,8 @@ export default class Control {
         }
       } else {
         if (y < this.h / 2) {
-          console.log('up');
           this.bios.send(`${this.id} 2\n`); // up
         } else {
-          console.log('down');
           this.bios.send(`${this.id} 0\n`); // down
         }
       }
