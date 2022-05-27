@@ -2,6 +2,7 @@ import Socket from './socket.js';
 import log from './log.js';
 import DcsBios from './dcsbios.js';
 import createControl from './controls/create.js';
+import renderDecoration from './decorations.js';
 
 var loadJSON = (await (async function (url, flush) {
   var cache = {};
@@ -132,31 +133,8 @@ export default class Panel {
     else
       this.ctx.translate(0, (this.canvas.height / 2) / scale - (this.config.h / 2));
     
-    //this.ctx.strokeRect(0, 0, this.config.w, this.config.h);
-    //this.ctx.strokeStyle = '#fff';
-    //this.ctx.fillStyle = '#fbb';
-
     for (let decoration of this.config.decorations ?? []) {
-      if (decoration.type == 'rect_round') {
-        this.ctx.roundRect(decoration.x, decoration.y, decoration.w, decoration.h, decoration.r);
-        if (decoration.fill) {
-          this.ctx.fillStyle = decoration.fill;
-          this.ctx.fill();
-        }
-        if (decoration.stroke) {
-          this.ctx.strokeStyle = decoration.stroke;
-          this.ctx.stroke();
-        }
-      } else if (decoration.type == "rect") {
-        if (decoration.fill) {
-          this.ctx.fillStyle = decoration.fill;
-          this.ctx.fillRect(decoration.x, decoration.y, decoration.w, decoration.h);
-        }
-        if (decoration.stroke) {
-          this.ctx.strokeStyle = decoration.stroke;
-          this.ctx.strokeRect(decoration.x, decoration.y, decoration.w, decoration.h);
-        }
-      }
+      renderDecoration(this.ctx, decoration);
     }
 
     for (let control of this.controls) {
