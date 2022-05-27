@@ -27,12 +27,12 @@ export default class Button extends Control {
   
     if (this.label) {
       ctx.fillStyle = '#eeeeee';
-      let scale = pressed ? 0.44 : 0.45;
-      ctx.font = `${this.h * scale}px Menlo, Consolas`;
+      let scale = pressed ? 0.32 : 0.36;
+      ctx.font = `${this.h * scale}px MS33558, monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(this.label,
-          this.x + this.w / 2,
+      ctx.fillText(this.label.toLowerCase(),
+          this.x + this.w / 2 + 1, // compensate for MS33558
           this.y + this.h / 2 + 1);
     }
   

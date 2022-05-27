@@ -25,6 +25,7 @@ export default class Panel {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.ctx = this.canvas.getContext('2d');
+
     document.body.appendChild(this.canvas);
 
     this.engaged = null; // widget being engaged with
@@ -88,8 +89,10 @@ export default class Panel {
   getControl(pos) {
     for (let control of this.controls) {
       if (pos.x >= control.x && pos.x <= control.x + control.w &&
-          pos.y >= control.y && pos.y <= control.y + control.h)
+          pos.y >= control.y && pos.y <= control.y + control.h) {
+        console.log('got');
         return control;
+      }
     }
   }
 

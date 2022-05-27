@@ -59,8 +59,8 @@ export default class Rocker extends Control {
     
     if (this.label.length == 2) {
       ctx.fillStyle = '#eeeeee';
-      let scale = 0.45;
-      ctx.font = `${Math.min(this.w, this.h) * scale}px Menlo, Consolas`;
+      let scale = 0.4;
+      ctx.font = `${Math.min(this.w, this.h) * scale}px MS33558, monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(this.label[0], a.x + a.w / 2, a.y + a.h / 2 + 1);
