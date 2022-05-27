@@ -33,27 +33,28 @@ export default class Rocker extends Control {
   render(ctx) {
     let a, b;
 
-    ctx.strokeStyle = '#888888';
-    ctx.beginPath();
+    const radius = 4;
+
     if (this.w > this.h) {
       a = {x: this.x, y: this.y, w: this.w / 2, h: this.h};                 // left
       b = {x: this.x + this.w / 2, y: this.y, w: this.w / 2, h: this.h};    // right 
-      ctx.moveTo(this.x + this.w / 2, this.y);
-      ctx.lineTo(this.x + this.w / 2, this.y + this.h);
     } else {
       a = {x: this.x, y: this.y + this.h / 2, w: this.w, h: this.h / 2};    // down
       b = {x: this.x, y: this.y, w: this.w, h: this.h / 2};                 // up
-      ctx.moveTo(this.x, this.y + this.h / 2);
-      ctx.lineTo(this.x + this.w, this.y + this.h / 2);
     }
-    ctx.stroke();
   
-    ctx.fillStyle = '#aaaaaa';
+    ctx.fillStyle = '#222222';
+    ctx.roundRect(this.x, this.y, this.w, this.h, radius);
+    ctx.fill();
+
+    ctx.fillStyle = '#1a1a1a';
     if (this.pressed == 0 || this.outputs[0].getData() == 0) {
-      ctx.fillRect(a.x, a.y, a.w, a.h);
+      ctx.roundRect(a.x, a.y, a.w, a.h, radius);
+      ctx.fill();
     }
     if (this.pressed == 2 || this.outputs[0].getData() == 2) {
-      ctx.fillRect(b.x, b.y, b.w, b.h);
+      ctx.roundRect(b.x, b.y, b.w, b.h, radius);
+      ctx.fill();
     }
     
     if (this.label.length == 2) {
@@ -62,11 +63,12 @@ export default class Rocker extends Control {
       ctx.font = `${Math.min(this.w, this.h) * scale}px Menlo, Consolas`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(this.label[0], a.x + a.w / 2, a.y + a.h / 2 + 2);
-      ctx.fillText(this.label[1], b.x + b.w / 2, b.y + b.h / 2 + 2);
+      ctx.fillText(this.label[0], a.x + a.w / 2, a.y + a.h / 2 + 1);
+      ctx.fillText(this.label[1], b.x + b.w / 2, b.y + b.h / 2 + 1);
     }
   
-    ctx.strokeStyle = '#ffffff';
-    ctx.strokeRect(this.x, this.y, this.w, this.h);
+    ctx.strokeStyle = '#444';
+    ctx.roundRect(this.x, this.y, this.w, this.h, radius);
+    ctx.stroke();
   }
 }

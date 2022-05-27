@@ -6,14 +6,14 @@ export default class Display extends Control {
     const size = parseInt(this.h);
     ctx.font = `${size}px Menlo, Consolas`;
     ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
+    ctx.textBaseline = "hanging";
 
     let str = this.outputs[0].getData();
     let w = this.w / str.length;
     for (let i = 0; i < str.length; i++) {
       let char = str.charAt(i);
       if (char == '#') char = "\u{2588}";
-      ctx.fillText(char, this.x + (i * w), this.y + size / 2);
+      ctx.fillText(char, this.x + (i * w), this.y);
     }
   }
 }
