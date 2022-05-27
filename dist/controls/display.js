@@ -3,14 +3,17 @@ import Control from './control.js';
 export default class Display extends Control {
   render(ctx) {
     ctx.fillStyle = '#00ff00';
-    ctx.font = `${this.h}px Menlo, Consolas`;
+    const size = parseInt(this.h);
+    ctx.font = `${size}px Menlo, Consolas`;
     ctx.textAlign = "left";
-    ctx.textBaseline = "top";
+    ctx.textBaseline = "middle";
 
     let str = this.outputs[0].getData();
     let w = this.w / str.length;
     for (let i = 0; i < str.length; i++) {
-      ctx.fillText(str.charAt(i), this.x + (i * w), this.y);
+      let char = str.charAt(i);
+      if (char == '#') char = "\u{2588}";
+      ctx.fillText(char, this.x + (i * w), this.y + size / 2);
     }
   }
 }

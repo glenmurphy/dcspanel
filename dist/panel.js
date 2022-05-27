@@ -17,7 +17,7 @@ var loadJSON = (await (async function (url, flush) {
 })());
 
 export default class Panel {
-  constructor() {
+  constructor(config_url) {
     this.bios = new DcsBios();
 
     this.canvas = document.createElement('canvas');
@@ -29,15 +29,20 @@ export default class Panel {
     this.engaged = null; // widget being engaged with
     this.controls = [];
     
-    window.addEventListener('mousedown', this.handleMouseDown.bind(this));
+    this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
     window.addEventListener('mousemove', this.handleMouseMove.bind(this));
     window.addEventListener('mouseup', this.handleUp.bind(this));
 
     this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), true);
     this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), true);
-    this.canvas.addEventListener('touchend', this.handleUp.bind(this), true);
+    window.addEventListener('touchend', this.handleUp.bind(this), true);
 
     window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('orientationchange', this.handleResize.bind(this));
+
+    if (config_url) {
+      this.setConfig(config_url);
+    }
   }
 
   async setConfig(config_url) {
@@ -63,6 +68,7 @@ export default class Panel {
       this.controls.push(createControl(this.bios, control_config, getControlScheme(control_config.id), this.render.bind(this)));
     }
 
+    document.body.style.backgroundColor = config.background ?? '#222';
     this.render();
   }
 
@@ -129,9 +135,34 @@ export default class Panel {
     //this.ctx.strokeRect(0, 0, this.config.w, this.config.h);
     //this.ctx.strokeStyle = '#fff';
     //this.ctx.fillStyle = '#fbb';
+
+    for (let decoration of this.config.decorations ?? []) {
+      if (decoration.type == 'rect_round') {
+        this.ctx.roundRect(decoration.x, decoration.y, decoration.w, decoration.h, decoration.r);
+        if (decoration.fill) {
+          this.ctx.fillStyle = decoration.fill;
+          this.ctx.fill();
+        }
+        if (decoration.stroke) {
+          this.ctx.strokeStyle = decoration.stroke;
+          this.ctx.stroke();
+        }
+      } else if (decoration.type == "rect") {
+        if (decoration.fill) {
+          this.ctx.fillStyle = decoration.fill;
+          this.ctx.fillRect(decoration.x, decoration.y, decoration.w, decoration.h);
+        }
+        if (decoration.stroke) {
+          this.ctx.strokeStyle = decoration.stroke;
+          this.ctx.strokeRect(decoration.x, decoration.y, decoration.w, decoration.h);
+        }
+      }
+    }
+
     for (let control of this.controls) {
       control.render(this.ctx);
     }
+
     this.ctx.restore();
   }
 
