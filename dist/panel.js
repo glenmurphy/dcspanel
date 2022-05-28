@@ -93,6 +93,34 @@ export default class Panel {
         return control;
       }
     }
+
+    // Did not tap a control, find the closest control within a buffer distance
+    let max_dist = Math.pow(20, 2); // buffer
+    let closest = null;
+
+    for (let control of this.controls) {
+      let x_dist = 0, y_dist = 0;
+      if (pos.x > control.x + control.w) {
+        x_dist = pos.x - (control.x + control.w);
+      } else if (pos.x < control.x) {
+        x_dist = control.x - pos.x;
+      }
+
+      if (pos.y > control.y + control.h) {
+        y_dist = pos.y - (control.y + control.h);
+      } else if (pos.y < control.y) {
+        y_dist = control.y - pos.y;
+      }
+
+      // Don't need sqrt because it's only for comparison
+      const dist = Math.pow(x_dist, 2) + Math.pow(y_dist, 2);
+      if (dist < max_dist) {
+        max_dist = dist;
+        closest = control;
+      }
+    }
+
+    return closest;
   }
 
   engageControl(control, x, y) {
