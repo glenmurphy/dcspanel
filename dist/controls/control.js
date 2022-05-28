@@ -16,11 +16,12 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 function byteToChar(b) {
   switch (b) {
     case 0:  return " ";
-
+    /*
     case 161: return "\u{2337}"; //⌷ : CDU input [] - need to find a better char for this
     case 169: return "\u{2022}"; //• : a dot •
     case 174: return "\u{2195}"; //↕ : updown arrow
     case 182: return "\u{2588}"; //▊: blinking cursor
+    */
     default: return String.fromCharCode(b);
   }
 }
@@ -42,9 +43,14 @@ class Output {
     this.id = id;
     this.config = config
 
-    this.start = config.address;
-    this.end = this.start + (config.max_length ?? 2);
+    this.start = this.config.address;
+    this.end = this.start + (this.config.max_length ?? 2);
+
     this.data = '';
+    if (this.config.type == 'string') {
+      this.data = 'INIT DCS PANEL : INIT DCS PANEL : INIT DCS PANEL'.slice(0, this.config.max_length);
+    }
+
     bios.addListener(this.start, this.end, this.handleData.bind(this));
     this.updateHandler = update_handler;
   }

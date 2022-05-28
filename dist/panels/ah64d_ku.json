@@ -4,7 +4,7 @@
   "h" : 480,
   "scheme" : "/assets/schemes/ah64d.json",
   "controls" : [
-    { "id" : "PLT_KU_DISPLAY",  "x" : 80, "y" : 25, "w" : 480, "h" : 37 },
+    { "id" : "PLT_KU_DISPLAY",  "x" : 80, "y" : 23, "w" : 480, "h" : 30, "font" : "cdu" },
 
     { "id" : "PLT_KU_A",        "x" :  29, "y" :  80, "w" : 50, "h" : 50, "label" : "A" },
     { "id" : "PLT_KU_B",        "x" :  95, "y" :  80, "w" : 50, "h" : 50, "label" : "B" },

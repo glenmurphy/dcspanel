@@ -67,11 +67,11 @@ export default class Panel {
 
     this.config = config;
     for (let control_config of this.config.controls) {
-      this.controls.push(createControl(this.bios, control_config, getControlScheme(control_config.id), this.render.bind(this)));
+      this.controls.push(createControl(this.bios, control_config, getControlScheme(control_config.id), this.queueRender.bind(this)));
     }
 
     document.body.style.backgroundColor = config.background ?? '#222';
-    this.render();
+    this.queueRender();
   }
 
   // Convert screenX/Y to panelX/Y
@@ -90,7 +90,6 @@ export default class Panel {
     for (let control of this.controls) {
       if (pos.x >= control.x && pos.x <= control.x + control.w &&
           pos.y >= control.y && pos.y <= control.y + control.h) {
-        console.log('got');
         return control;
       }
     }
@@ -103,7 +102,7 @@ export default class Panel {
 
     this.engaged = control;
     this.engaged.press(x, y);
-    this.render(); // we should queue renders
+    this.queueRender(); // we should queue renders
   }
 
   disengageControl() {
@@ -112,10 +111,19 @@ export default class Panel {
     // Do control action
     this.engaged.release();
     this.engaged = null;
-    this.render(); // we should queue renders
+    this.queueRender(); // we should queue renders
+  }
+
+  queueRender() {
+    if (this.render_queued) return;
+
+    this.render_queued = true;
+    window.requestAnimationFrame(this.render.bind(this));
   }
 
   render() {
+    this.render_queued = false;
+
     this.ctx.strokeStyle = '#fff';
     this.ctx.strokeWidth = 1;
 
@@ -151,7 +159,7 @@ export default class Panel {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.ctx = this.canvas.getContext('2d');
-    this.render();
+    this.queueRender();
   }
 
 
@@ -164,7 +172,7 @@ export default class Panel {
   handleMove(pos) {
     if (this.engaged) {
       this.engaged.move(pos.x - this.engaged.x, pos.y - this.engaged.y);
-      this.render();
+      this.queueRender();
     }
   }
 
