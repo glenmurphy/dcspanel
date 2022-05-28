@@ -38,6 +38,18 @@ function getInteger(b) {
   return result;
 }
 
+var getInitString = (function (len) {
+  let index = 0;
+  const base_str = "INIT DCS PANEL-";
+  const str = base_str + base_str + base_str + base_str;
+
+  return function(len) {
+    let res = str.slice(index, index + len);
+    index = (index + len) % base_str.length;
+    return res;
+  };
+})();
+
 class Output {
   constructor(id, bios, config, update_handler) {
     this.id = id;
@@ -48,7 +60,7 @@ class Output {
 
     this.data = '';
     if (this.config.type == 'string') {
-      this.data = 'INIT DCS PANEL : INIT DCS PANEL : INIT DCS PANEL'.slice(0, this.config.max_length);
+      this.data = getInitString(this.config.max_length);
     }
 
     bios.addListener(this.start, this.end, this.handleData.bind(this));
