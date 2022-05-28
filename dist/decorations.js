@@ -21,9 +21,23 @@ function renderRectRound(ctx, decoration) {
   }
 }
 
+function renderLine(ctx, decoration) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(decoration.path[0], decoration.path[1])
+  for (var i = 2; i < decoration.path.length; i += 2) {
+    ctx.lineTo(decoration.path[i], decoration.path[i + 1]);
+  }  
+  ctx.strokeStyle = decoration.stroke ?? '#fff';
+  ctx.lineWidth = decoration.width ?? 2;
+  ctx.stroke();
+  ctx.restore();
+}
+
 export default function renderDecoration(ctx, decoration) {
   switch (decoration.type) {
     case 'rect_round': return renderRectRound(ctx, decoration);
     case 'rect':       return renderRect(ctx, decoration);
+    case 'line':       return renderLine(ctx, decoration);
   }
 }

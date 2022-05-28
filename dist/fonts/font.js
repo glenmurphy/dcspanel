@@ -65,7 +65,6 @@ export default class Font {
         log(`Missing char: ${char} (${char.charCodeAt(0)})`);
         continue;
       }
-      log(char);
       const size_y = size * (char_def.h / char_def.w);
       ctx.drawImage(this.image, char_def.x + 1, char_def.y + 1, char_def.w - 2, char_def.h - 2, x, y, size, size_y);
     }
