@@ -40,7 +40,7 @@ function getInteger(b) {
 
 var getInitString = (function (len) {
   let index = 0;
-  const base_str = "INIT DCS PANEL-";
+  const base_str = "WAITING FOR DATA ";
   const str = base_str + base_str + base_str + base_str;
 
   return function(len) {
